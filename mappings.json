@@ -1,0 +1,45 @@
+{
+    "user": {
+        "properties": {
+            "name": {
+                "type": "string",
+                "index_analyzer":"autocomplete",
+                "search_analyzer": "standard",
+                "fields": {
+                    "exact_lower": {
+                        "type":"string",
+                        "index_analyzer":"lowercase_only",
+                        "search_analyzer": "lowercase_only"
+                    }
+                }
+            },
+            "names": {
+                "type":"string",
+                "index_analyzer":"autocomplete",
+                "search_analyzer": "standard"
+            },
+            "suits": {
+                "type":"nested",
+                "properties": {
+                    "gear": {
+                        "type": "nested",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "index_analyzer":"autocomplete",
+                                "search_analyzer": "standard",
+                                "fields": {
+                                    "exact_lower": {
+                                        "type":"string",
+                                        "index_analyzer":"lowercase_only",
+                                        "search_analyzer": "lowercase_only"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

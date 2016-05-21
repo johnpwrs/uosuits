@@ -1,0 +1,71 @@
+{
+    "settings": {
+        "analysis": {
+            "filter": {
+                "autocomplete_filter": { 
+                    "type":     "edge_ngram",
+                    "min_gram": 1,
+                    "max_gram": 64
+                },
+                "ngram_filter": {
+                    "type": "ngram",
+                    "min_gram": 1,
+                    "max_gram": 64
+                },
+                "synonym": {
+                    "type":"synonym",
+                    "synonyms": [
+                        "ft, ft., fort",
+                        "st, st., street"
+                    ]
+                }
+            },
+            "analyzer": {
+                "autocomplete": {
+                    "type":      "custom",
+                    "tokenizer": "standard",
+                    "filter": [
+                      "lowercase",
+                      "autocomplete_filter",
+                      "synonym" 
+                    ]
+                },
+                "autocomplete_word_delim": {
+                    "type":      "custom",
+                    "tokenizer": "standard",
+                    "filter": [
+                      "lowercase",
+                      "autocomplete_filter",
+                      "synonym",
+                      "word_delimiter" 
+                    ]
+                },
+                "autocomplete_spaces": {
+                    "type":      "custom",
+                    "tokenizer": "keyword",
+                    "filter": [
+                      "lowercase",
+                      "autocomplete_filter" 
+                    ]
+                },
+                "lowercase_only": {
+                    "type":      "custom",
+                    "tokenizer": "keyword",
+                    "filter": [
+                        "lowercase"
+                    ]
+                },
+                "substring": {
+                    "type": "custom",
+                    "tokenizer": "keyword",
+                    "filter": [
+                        "lowercase",
+                        "ngram_filter"
+                    ]
+                }
+            }
+        },
+        "number_of_replicas": "1",
+        "refresh_interval": "1000"
+    }
+}  

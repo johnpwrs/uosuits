@@ -5,6 +5,14 @@ from datetime import datetime
 import json
 
 users = {}
+
+with open('settings.json') as settings_file:
+    settings = json.load(settings_file)
+
+with open('mappings.json') as mappings_file:
+    mappings = json.load(mappings_file)
+
+
 def import_suits_old():
     user_start = False
     equip_start = False
@@ -80,6 +88,10 @@ def import_suits_old():
                "name": gear_name,
                "properties": gear_properties 
             })
+
+def clean_old_suits():
+    for user in users:
+        users[user]['suits'] = [users[user]['suits'][0]]
 
 def import_suits():
     user_start = False
@@ -163,8 +175,9 @@ def import_suits():
 
 
 if __name__ == '__main__':
-    import_suits()
     import_suits_old()
+    clean_old_suits()
+    import_suits()
     index = ElasticIndex(
         'uosuits', 
         'https://search-uosuits-zf2mqzjundzog3jg2xjzuqeaye.us-west-2.es.amazonaws.com',
@@ -172,7 +185,7 @@ if __name__ == '__main__':
     )
 
     if not index.exists():
-        result = index.create({}, {})
+        result = index.create(settings, mappings)
         print result
     
     bulk_request = ''
