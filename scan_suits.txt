@@ -1,0 +1,116 @@
+;set #targCurs 1
+; busy wait until something is targeted
+;while #targCurs <> 0 {}
+set %count 0
+set %resetCount 0
+set %fileName suit3.txt
+
+start:
+set %count %count + 1
+set %resetCount %resetCount + 1
+set #result %resetCount
+
+if %count = 300
+{
+  event macro 19 0
+  set %count 0
+}
+
+if %resetCount = 700000
+{
+  ignoreitem reset
+  set %resetCount 0
+}
+
+findItem HS_IS_NAB_OAB_QAB_PAB_MAB_RAB_SAB_LAB_XU_AV_OCB_NCB_NF_VD_EG G_20
+
+if #findKind = -1
+{
+  ;wait 1s
+  goto start
+}
+
+if #findId = #charId
+{
+   ignoreItem #findId
+   goto start
+}
+
+if #findRep = 7
+{
+  ignoreItem #findId
+  goto start
+}
+
+set #lobjectid #findid
+event Macro 17 0
+  
+event Property #findId
+if #property = N/A
+goto start
+
+if #property = $
+goto start
+;display #property
+;execute cmd.exe /c "echo ******* >>suit.txt && echo #date #time #findId #property >>suit.txt"
+
+set %cmd "
+set %cmd %cmd , echo , #spc , ***** , #spc , >> , %fileName , #spc , && , #spc , echo , #spc , #date , $ , #time , $ , #findId , $ , #findType , #property , #findRep , #spc , >> , %fileName , #spc , &&
+;execute cmd.exe /c echo #date #time #findId #property >>suit.txt
+
+wait 1s
+  
+ignoreItem #findId
+
+;set %cmd "
+  
+finditem * C_ , #findId
+
+for #FINDINDEX 1 #FINDCNT
+{
+  set %retryCount = 0
+  
+  tryagain:
+  event Property #findId
+  if #property <> $
+  {
+    if #findindex = #findcnt
+    {
+      set %cmd %cmd , echo , #spc , #findId , $ , #property , #spc , >> , %fileName , #spc
+    }
+    else
+    {
+      set %cmd %cmd , echo , #spc , #findId , $ , #property , #spc , >> , %fileName , #spc , && , #spc
+    }
+  }
+  else
+  {
+     ;set %retryCount %retryCount + 1
+     ;goto tryagain
+     ;if %retryCount < 7
+     ;{
+        ;event sysmessage retrying #findId
+        ;wait 1s
+        ;goto tryagain
+     ;}
+  }
+}
+
+set %cmd %cmd , "
+execute cmd.exe /c %cmd
+click 1754 194  r
+
+goto start
+
+;>>suit.txt
+
+  
+
+
+;finditem * C_ , #ltargetid
+;for #FINDINDEX 1 #FINDCNT
+;{
+;   event Property #findId
+;   display #property
+;   execute cmd.exe /c echo #property >>suit.txt
+;}
