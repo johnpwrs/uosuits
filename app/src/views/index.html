@@ -1,8 +1,15 @@
-<html>
+<html ng-app="uoSuitsApp">
   <head>
     <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../../node_modules/angular/angular.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="../js/main.js"></script>
   </head>
+  <body ng-controller="SearchController">
+    <ul>
+      <li ng-repeat="t in test">
+        {{t}}
+      </li>
+    </ul>
+  </body>
 </html>
