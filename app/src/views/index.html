@@ -1,15 +1,79 @@
-<html ng-app="uoSuitsApp">
+<!DOCTYPE html>
+<html ng-app="uoSuitsApp", lang="en">
   <head>
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../css/main.css" rel="stylesheet" media="screen">
     <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="../../node_modules/angular/angular.js"></script>
+    <script src="../vendor/lodash/lodash.min.js"></script>
+    <script src="../../node_modules/angular/angular.min.js"></script>
+    <script src="../../node_modules/moment/moment.js"></script>
+    <script src="../../node_modules/angular-moment/angular-moment.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="../js/main.js"></script>
   </head>
   <body ng-controller="SearchController">
-    <ul>
-      <li ng-repeat="t in test">
-        {{t}}
-      </li>
-    </ul>
+    
+    <div class="row-fluid header">
+      <div class="span12">
+        <h1>Atlantic Beta</h1>
+      </div>
+    </div>
+    
+    <div class="row-fluid search-logo">
+      <div class="span4"></div>
+      <div class="span4 main-search-logo">
+        <img src="../img/armor-small.png"></img>
+        <h1 class="center-block">uoSuits</h1>
+      </div>
+      <div class="span4"></div>
+    </div>
+      
+    <div class="row-fluid">
+      <div class="span4"></div>
+      <div class="span4">
+          <input type="text" class="search-box input-large search-query" placeholder="Type a players name or a piece of gear..." />
+      </div>
+      <div class="span4"></div>
+    </div>
+
+    <div class="row-fluid search-result" ng-repeat="result in results">
+      <div class="span2"></div>
+      <div class="span8 result-body">
+        
+        <div class="row-fluid">
+          <div class="span4 name-column">
+            <strong>Name:</strong> {{result._source.name}}
+          </div>
+          <div class="span4"></div>
+          <div class="span4"></div>
+        </div>
+        
+        <div class="row-fluid">
+          <div class="span4 names-column">
+            <strong>Aliases:</strong> {{result._source.names}}
+          </div>
+          <div class="span4"></div>
+          <div class="span4"></div>
+        </div>
+        
+        <div class="row-fluid">
+          <div class="span4 names-column">
+            <strong>Reputation:</strong> {{result._source.reputation}}
+          </div>
+          <div class="span4"></div>
+          <div class="span4"></div>
+        </div>
+        
+        <div class="row-fluid">
+          <div class="span4 last-seen-column">
+            <strong>Last Seen:</strong> {{result._source.suits[0].found_date}}
+          </div>
+          <div class="span4"></div>
+          <div class="span4"></div>
+        </div>
+      
+      </div>
+      <div class="span2"></div>
+    </div> 
   </body>
 </html>

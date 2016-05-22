@@ -6,8 +6,10 @@
   "main": "Gruntfile.js",
   "dependencies": {
     "angular": "^1.5.5",
+    "angular-moment": "^0.10.3",
     "jade": "~1.11.0",
-    "lodash": "~3.10.1"
+    "lodash": "~3.10.1",
+    "moment": "^2.13.0"
   },
   "devDependencies": {
     "grunt": "~0.4.5",

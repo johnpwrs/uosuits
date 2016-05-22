@@ -10,8 +10,8 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      files: ['<%= jshint.files %>', './src/views/*.html'],
-      tasks: ['concat', 'copy']
+      files: ['<%= jshint.files %>', './src/views/*.html', './src/css/*.css'],
+      tasks: ['jshint', 'concat', 'copy']
     },
     concat: {
       js: {
@@ -41,6 +41,18 @@ module.exports = function(grunt) {
         cwd: 'src/vendor/', 
         src: '**', 
         dest: './dist/vendor/'
+      },
+      css: {
+        expand: true,
+        cwd: 'src/css/', 
+        src: '**', 
+        dest: './dist/css/'
+      },
+      fonts: {
+        expand: true,
+        cwd: 'src/fonts/', 
+        src: '**', 
+        dest: './dist/fonts/'
       }
     }
   });

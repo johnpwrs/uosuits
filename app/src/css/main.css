@@ -1,0 +1,42 @@
+@font-face {
+  font-family:AlmendraSC;
+  src: url("../fonts/AlmendraSC-Regular.otf");
+}
+
+@font-face {
+  font-family:AlmendraRegular;
+  src: url("../fonts/Almendra-Regular.otf");
+}
+
+.header div {
+  font-family: AlmendraRegular;
+  background-color: black;
+  color: white;
+  padding-right: 10px;
+  text-align:right;
+}
+
+.main-search-logo {
+  text-align:center;
+  padding-top:10px;
+  font-family: AlmendraSC;
+}
+
+.main-search-logo img {
+  width:50%;
+}
+
+.search-box {
+  width: 100%;
+}
+
+.search-result {
+}
+
+.result-body {
+  border: 1px solid;
+  margin-top:10px;
+  padding:10px;
+  text-align:left;
+  border-radius:10px;
+}
