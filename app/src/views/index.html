@@ -31,7 +31,7 @@
     <div class="row-fluid">
       <div class="span4"></div>
       <div class="span4">
-          <input type="text" class="search-box input-large search-query" placeholder="Type a players name or a piece of gear..." />
+          <input type="text" class="search-box input-large search-query" placeholder="Type a players name or a piece of gear..." ng-keyup="search()" ng-model="searchWord"/>
       </div>
       <div class="span4"></div>
     </div>
@@ -39,40 +39,54 @@
     <div class="row-fluid search-result" ng-repeat="result in results">
       <div class="span2"></div>
       <div class="span8 result-body">
-        
-        <div class="row-fluid">
-          <div class="span4 name-column">
-            <strong>Name:</strong> {{result._source.name}}
+        <div class="span4">
+          <h4 class="result-title">Player Details:</h4>
+          <div class="row-fluid">
+            <div class="span12 name-column">
+              <strong>Name:</strong> {{result._source.name}}
+            </div>
           </div>
-          <div class="span4"></div>
-          <div class="span4"></div>
+          
+          <div class="row-fluid">
+            <div class="span12 names-column">
+              <strong>Aliases:</strong> {{result._source.names}}
+            </div>
+          </div>
+          
+          <div class="row-fluid">
+            <div class="span12 names-column">
+              <strong>Reputation:</strong> {{result._source.reputation}}
+            </div>
+          </div>
+          
+          <div class="row-fluid">
+            <div class="span12 last-seen-column">
+              <strong>Last Seen:</strong> {{result._source.suits[0].found_date}}
+            </div>
+          </div>
         </div>
         
-        <div class="row-fluid">
-          <div class="span4 names-column">
-            <strong>Aliases:</strong> {{result._source.names}}
-          </div>
-          <div class="span4"></div>
-          <div class="span4"></div>
+        <div class="span4">
+          <h4 class="result-title">Total Resists:</h4>
+          <ul>
+            <li ng-repeat="(prop, total) in result._source.suits[0].totals" ng-if="prop.indexOf('Resist') > -1">
+                {{prop}}: {{total}}
+            </li>
+          </ul>
+        </div>
+        <div class="span4">
+          <h4 class="result-title">Total Properties:</h4>
+          <ul>
+            <li ng-repeat="(prop, total) in result._source.suits[0].totals" ng-if="prop.indexOf('Resist') <= -1">
+                {{prop}}: {{total}}
+            </li>
+          </ul>
+        
         </div>
         
-        <div class="row-fluid">
-          <div class="span4 names-column">
-            <strong>Reputation:</strong> {{result._source.reputation}}
-          </div>
-          <div class="span4"></div>
-          <div class="span4"></div>
+        
         </div>
         
-        <div class="row-fluid">
-          <div class="span4 last-seen-column">
-            <strong>Last Seen:</strong> {{result._source.suits[0].found_date}}
-          </div>
-          <div class="span4"></div>
-          <div class="span4"></div>
-        </div>
-      
-      </div>
       <div class="span2"></div>
     </div> 
   </body>

@@ -367,6 +367,7 @@ def import_suits():
                         gear[i] = gear[i].encode('utf-8')
                     except:
                         continue
+                    # They have a piece part of a set, but not the full set
                     if full_set in gear[i]:
                         gear_properties[full_set] = {}
                         is_set = True

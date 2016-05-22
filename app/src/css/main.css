@@ -39,4 +39,12 @@
   padding:10px;
   text-align:left;
   border-radius:10px;
+  background-color:#F8F8FF;
+}
+
+.result-title {
+  display:block;
+  margin-bottom:5px;
+  font-family: AlmendraSC;
+  border-bottom: 1px solid black;
 }
