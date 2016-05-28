@@ -3,8 +3,8 @@
         "properties": {
             "name": {
                 "type": "string",
-                "index_analyzer":"autocomplete",
-                "search_analyzer": "keyword",
+                "index_analyzer":"substring",
+                "search_analyzer": "lowercase_only",
                 "fields": {
                     "exact_lower": {
                         "type":"string",
@@ -15,26 +15,31 @@
             },
             "names": {
                 "type":"string",
-                "index_analyzer":"autocomplete",
-                "search_analyzer": "keyword"
+                "index_analyzer":"substring",
+                "search_analyzer": "lowercase_only"
+            }
+        }
+    },
+    "suits": {
+        "_parent": {
+            "type":"user"
+        },
+        "properties": {
+            "date": {
+                "type":"date"
             },
-            "suits": {
-                "type":"nested",
+            "gear": {
+                "type": "nested",
                 "properties": {
-                    "gear": {
-                        "type": "nested",
-                        "properties": {
-                            "name": {
-                                "type": "string",
-                                "index_analyzer":"autocomplete",
-                                "search_analyzer": "standard",
-                                "fields": {
-                                    "exact_lower": {
-                                        "type":"string",
-                                        "index_analyzer":"lowercase_only",
-                                        "search_analyzer": "lowercase_only"
-                                    }
-                                }
+                    "name": {
+                        "type": "string",
+                        "index_analyzer":"substring",
+                        "search_analyzer": "lowercase_only",
+                        "fields": {
+                            "exact_lower": {
+                                "type":"string",
+                                "index_analyzer":"lowercase_only",
+                                "search_analyzer": "lowercase_only"
                             }
                         }
                     }

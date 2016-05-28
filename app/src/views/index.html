@@ -2,6 +2,7 @@
 <html ng-app="uoSuitsApp", lang="en">
   <head>
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" media="screen">
     <link href="../css/main.css" rel="stylesheet" media="screen">
     <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../vendor/lodash/lodash.min.js"></script>
@@ -23,7 +24,7 @@
       <div class="span4"></div>
       <div class="span4 main-search-logo">
         <img src="../img/armor-small.png"></img>
-        <h1 class="center-block">uoSuits</h1>
+        <h1 class="center-block"><span style="color:#990000;">uo</span>Suits</h1>
       </div>
       <div class="span4"></div>
     </div>
@@ -31,7 +32,7 @@
     <div class="row-fluid">
       <div class="span4"></div>
       <div class="span4">
-          <input type="text" class="search-box input-large search-query" placeholder="Type a players name or a piece of gear..." ng-keyup="search()" ng-model="searchWord"/>
+          <input type="text" id="search-box" class="search-box input-large search-query" placeholder="Type a players name or a piece of gear..." ng-keyup="search()" ng-model="searchWord"/>
       </div>
       <div class="span4"></div>
     </div>
@@ -40,49 +41,90 @@
       <div class="span2"></div>
       <div class="span8 result-body">
         <div class="span4">
-          <h4 class="result-title">Player Details:</h4>
-          <div class="row-fluid">
-            <div class="span12 name-column">
-              <strong>Name:</strong> {{result._source.name}}
-            </div>
-          </div>
+          <h4 style="color:#990000;"class="result-title">{{result._source.name}}</h4>
           
-          <div class="row-fluid">
-            <div class="span12 names-column">
-              <strong>Aliases:</strong> {{result._source.names}}
-            </div>
-          </div>
-          
-          <div class="row-fluid">
-            <div class="span12 names-column">
+          <ul class="fa-ul">
+            <li>
+               <i class="fa fa-li fa-user"></i>
+               <strong>Aliases:</strong> {{result._source.names | names}}
+            </li>
+            <li>
+              <i class="fa fa-legal fa-li"></i>
               <strong>Reputation:</strong> {{result._source.reputation}}
-            </div>
-          </div>
+            </li>
+            <li>
+              <i class="fa fa-eye fa-li"></i>
+              <strong>Last Seen:</strong> {{result._source.suits.found_date | date}} EST
+            </li> 
           
+        </div>
+        
+        <div class="span4">
           <div class="row-fluid">
-            <div class="span12 last-seen-column">
-              <strong>Last Seen:</strong> {{result._source.suits[0].found_date}}
-            </div>
+            <h4 class="result-title" style="color:#00007f;">Pieces:</h4>
+            <ul class="fa-ul">
+              <li ng-repeat="gear in result._source.suits.gear" ng-if="!ignorePiece(gear.name)">
+                 <i class="fa-li fa fa-black-tie"></i>
+                 <strong> {{gear.name}}</strong>
+              </li>
+            </ul>
+          </div>
+          <div class="row-fluid">
+            <h4 class="result-title" style="color:#006600;">Total Resists:</h4>
+            <ul class="fa-ul">
+              <li ng-repeat="prop in itemResists" ng-if="result._source.suits.totals[prop]">
+                   <i class="fa-li fa fa-shield"></i>
+                  <strong>{{prop}}:</strong> {{result._source.suits.totals[prop]}}
+              </li>
+            </ul>
           </div>
         </div>
-        
         <div class="span4">
-          <h4 class="result-title">Total Resists:</h4>
-          <ul>
-            <li ng-repeat="(prop, total) in result._source.suits[0].totals" ng-if="prop.indexOf('Resist') > -1">
-                {{prop}}: {{total}}
+          <h4 class="result-title" style="color:#cc8400;">Properties Totals:</h4>
+          <ul class="fa-ul">
+            <li ng-repeat="prop in statProperties" ng-if="result._source.suits.totals[prop]">
+                 <i class="fa-li fa fa-balance-scale"></i>
+                <strong>{{prop}}:</strong> {{result._source.suits.totals[prop]}}
+            </li>
+          </ul>
+          <ul class="fa-ul">
+            <li ng-repeat="prop in regenProperties" ng-if="result._source.suits.totals[prop]">
+                 <i class="fa-li fa fa-leaf"></i>
+                <strong>{{prop}}:</strong> {{result._source.suits.totals[prop]}}
+            </li>
+          </ul>
+          <ul class="fa-ul">
+            <li ng-repeat="prop in defenseProperties" ng-if="result._source.suits.totals[prop]">
+                 <i class="fa-li fa fa-heart"></i>
+                <strong>{{prop}}:</strong> {{result._source.suits.totals[prop]}}
+            </li>
+          </ul>
+          <ul class="fa-ul">
+            <li ng-repeat="prop in attackProperties" ng-if="result._source.suits.totals[prop]">
+                 <i class="fa-li fa fa-fire"></i>
+                <strong>{{prop}}:</strong> {{result._source.suits.totals[prop]}}
+            </li>
+          </ul>
+          <ul class="fa-ul">
+            <li ng-repeat="prop in magicProperties" ng-if="result._source.suits.totals[prop]">
+                 <i class="fa-li fa fa-magic"></i>
+                <strong>{{prop}}:</strong> {{result._source.suits.totals[prop]}}
+            </li>
+          </ul>
+          <ul class="fa-ul">
+            <li ng-repeat="prop in skills" ng-if="result._source.suits.totals[prop]">
+                 <i class="fa-li fa fa-arrow-up"></i>
+                <strong>{{prop}}:</strong> {{result._source.suits.totals[prop]}}
+            </li>
+          </ul>
+          <ul class="fa-ul">
+            <li ng-repeat="prop in properties" ng-if="result._source.suits.totals[prop]">
+                 <i class="fa-li fa fa-tag"></i>
+                <strong>{{prop}}:</strong> {{result._source.suits.totals[prop]}}
             </li>
           </ul>
         </div>
-        <div class="span4">
-          <h4 class="result-title">Total Properties:</h4>
-          <ul>
-            <li ng-repeat="(prop, total) in result._source.suits[0].totals" ng-if="prop.indexOf('Resist') <= -1">
-                {{prop}}: {{total}}
-            </li>
-          </ul>
-        
-        </div>
+        <a href="something"><span class="link-overlay"></span></a>
         
         
         </div>

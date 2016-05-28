@@ -26,21 +26,21 @@ module.exports = function(grunt) {
     copy: {
       views: {
         expand: true,
-        cwd: 'src/', 
-        src: 'views', 
-        dest: './dist/'
+        cwd: 'src/views/', 
+        src: '**', 
+        dest: './dist/views/'
       },
       images: {
         expand: true,
-        cwd: 'src/', 
-        src: 'img', 
-        dest: './dist/'
+        cwd: 'src/img/', 
+        src: '**', 
+        dest: './dist/img/'
       },
       vendor: {
         expand: true,
-        cwd: 'src/', 
-        src: 'vendor', 
-        dest: './dist/'
+        cwd: 'src/vendor/', 
+        src: '**', 
+        dest: './dist/vendor/'
       },
       css: {
         expand: true,
