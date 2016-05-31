@@ -16,11 +16,11 @@ module.exports = function(grunt) {
     concat: {
       js: {
         src: ['./src/js/*.js'],
-        dest: './dist/js/main.js'
+        dest: './static/js/main.js'
       },
       css: {
         src: ['./src/css/*.css'],
-        dest: './dist/css/main.css'
+        dest: './static/css/main.css'
       }
     },
     copy: {
@@ -28,31 +28,31 @@ module.exports = function(grunt) {
         expand: true,
         cwd: 'src/views/', 
         src: '**', 
-        dest: './dist/views/'
+        dest: './static/views/'
       },
       images: {
         expand: true,
         cwd: 'src/img/', 
         src: '**', 
-        dest: './dist/img/'
+        dest: './static/img/'
       },
       vendor: {
         expand: true,
         cwd: 'src/vendor/', 
         src: '**', 
-        dest: './dist/vendor/'
+        dest: './static/vendor/'
       },
       css: {
         expand: true,
         cwd: 'src/css/', 
         src: '**', 
-        dest: './dist/css/'
+        dest: './static/css/'
       },
       fonts: {
         expand: true,
         cwd: 'src/fonts/', 
         src: '**', 
-        dest: './dist/fonts/'
+        dest: './static/fonts/'
       }
     }
   });

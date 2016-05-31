@@ -205,7 +205,7 @@ def parse_user_data_new(line):
         date + ':' + time, 
         '%y%m%d:%H%M%S'
     )
-    date_time = date_time.strftime('%Y-%m-%d:%H:%M:%S')
+    date_time = date_time.strftime('%Y-%m-%dT%H:%M:%SZ')
     user_id = user_details[2]
 
     user_type = user_details[3].split(' ')[0]
@@ -227,56 +227,6 @@ def parse_user_data_new(line):
         users[user_id] = {
             "reputation": user_rep, 
             "type": user_type,
-            "names":[], 
-            "suits":[]
-        }
-
-    # the original import sometimes didn't record a name 
-    if name:
-        users[user_id]['name'] = name
-        if name not in users[user_id]['names']:
-            users[user_id]['names'].append(name)
-    
-    users[user_id]['suits'].append({"found_date":date_time, "gear":[]})
-
-    
-    user_start = False
-    equip_start = True
-
-def parse_user_data(line):
-    global user_start
-    global equip_start
-    global user_details
-    global user_id
-    global user_titles
-    
-    user_details = line.split('$')
-    date = user_details[0]
-    time = user_details[1]
-    date_time = datetime.strptime(
-        date + ':' + time, 
-        '%y%m%d:%H%M%S'
-    )
-    date_time = date_time.strftime('%Y-%m-%d:%H:%M:%S')
-    user_id = user_details[2]
-
-    name = user_details[3].strip()
-
-    user_rep = None
-    
-    # the remaining details split from the input line
-    # will contain a number of "titles" for the user
-    # and the reputation of the user.  if the line is numeric,
-    # we know it is the reputation 
-    for i in range(4, len(user_details)):
-        if user_details[i].isnumeric():
-            user_rep = user_details[i]
-        else:
-            user_titles.append(user_details[i])
-
-    if user_id not in users:
-        users[user_id] = {
-            "reputation": user_rep, 
             "names":[], 
             "suits":[]
         }
@@ -362,105 +312,6 @@ def parse_equipment_data_new(line):
        "src": line 
     })
 
-def parse_equipment_data(line):
-    global user_start
-    global equip_start
-    global user_details
-    global user_id
-    global user_titles
-
-    suit_index = len(users[user_id]['suits']) - 1
-    gear = line.split('$')
-    
-    # ran into a few problems where this wasn't encoded correctly
-    # skip if it we can't
-    try: 
-        gear[0] = gear[0].encode('utf-8')
-    except:
-        return 
-
-    gear_name = gear[0]
-    gear_properties = {"other":[]}
-    is_set = False
-  
-    # being parsing gear information
-    for i in range(1, len(gear)):
-       
-        # Make sure the information exists and is parseable
-        if len(gear[i].strip()) > 0:
-            
-            # check if this item is part of a set,
-            # but the full set is not present
-            # if so, we nest this information into it's own object
-            if FULL_SET_PREFIX in gear[i]:
-                gear_properties[FULL_SET_PREFIX] = {}
-                is_set = True
-            
-            # loop through all known prpoerties
-            # and see if it matches the property we are looking at
-            found_prop = False
-            for property in properties:
-                if property in gear[i]:
-                    found_prop = True
-                    
-                    # Split property at property name
-                    # index 1 will give us the property value
-                    # If there is no value here, it's a property type that
-                    # isn't given a numerical value
-                    split_prop = gear[i].split(property)
-                    if split_prop[1]:
-                        if is_set:
-                            gear_properties[FULL_SET_PREFIX][property] = split_prop[1].strip()
-                        else:
-                            if property in gear_properties:
-                                gear_properties[property] = [
-                                    gear_properties[property], 
-                                    split_prop[1].strip()
-                                ]
-                            else:
-                                gear_properties[property] = split_prop[1].strip()
-                    else:
-                        if is_set:
-                            gear_properties[FULL_SET_PREFIX][property] = True
-                        else:
-                            gear_properties[property] = True
-            # Record all properties we don't know about,
-            # just in case
-            if not found_prop:
-                gear_properties["other"].append(gear[i])
-                #gear_properties[gear[i]] = True
-
-    users[user_id]['suits'][suit_index]['gear'].append({
-       "name": gear_name,
-       "properties": gear_properties,
-       "src": line 
-    })
-
-
-
-def import_suits_old():
-    global user_start
-    global equip_start
-    global user_details
-    global user_id
-    global user_titles
-    
-    for line in open('suit2.txt', 'r'):
-        line = unicode(line, errors='replace')
-        user_titles = []
-        line = line.strip().replace('\n', '')
-        if line == '*****':
-            user_start = True
-            equip_start = False
-            continue
-        
-        if user_start:
-            parse_user_data(line)
-            continue
-
-        if equip_start:
-           parse_equipment_data(line)
-
 def clean_suits():
     for user in users:
         del_indices = []
@@ -477,11 +328,6 @@ def clean_suits():
         for index in reversed(del_indices):
             del users[user]['suits'][index]
 
-
-def clean_old_suits():
-    for user in users:
-        users[user]['suits'] = [users[user]['suits'][0]]
-
 def import_suits():
     global user_start
     global equip_start
@@ -494,7 +340,7 @@ def import_suits():
     user_details = None
     user_id = None
     
-    for line in open('suit4.txt', 'r'):
+    for line in open('suitnew.txt', 'r'):
         line = unicode(line, errors='replace')
         user_titles = []
         line = line.strip().replace('\n', '')
@@ -552,13 +398,13 @@ def calculate_totals():
                         totals[property_name] = value
             suit['totals'] = totals
 
-def get_user_bulk_req(user):
+def get_user_bulk_req(user_id, user):
     bulk_request = ''
     bulk_request += json.dumps(
         {
             "create":{
                 "_type":"user", 
-                "_id":user, 
+                "_id":user_id, 
                 "_index":"uosuits"
             }
         }
@@ -583,7 +429,7 @@ def get_user_update_req(user_id, user, user_doc):
     es_names = user_doc['_source']['names']
     
     if user['name'] != es_name: 
-        update_doc['doc']['user'] = es_name 
+        update_doc['doc']['user'] = user['name']
    
     namesChanged = False 
     for name in user['names']:
@@ -636,9 +482,9 @@ def update_elastic():
         port=443
     )
 
-    if not index.exists():
-        result = index.create(settings, mappings)
-        print result
+    #if not index.exists():
+    #    result = index.create(settings, mappings)
+    #    print result
     
     bulk_request = ''
     count = 0
@@ -650,11 +496,11 @@ def update_elastic():
 
         if '_source' not in user_doc:
             print "adding new user %s" %(users[user]['name'])
-            bulk_request += get_user_bulk_req(users[user]) 
+            bulk_request += get_user_bulk_req(user, users[user]) 
         else:
             user_update = get_user_update_req(user, users[user], user_doc)
-            bulk_request += user_update
             if len(user_update) > 0:
+                bulk_request += user_update
                 print "updating user info for %s" %(users[user]['name']) 
         
         es_user_suits = get_user_suits(index, user)['hits']['hits']
@@ -686,18 +532,18 @@ def update_elastic():
 
         count = count + 1
         if count > 500 and len(bulk_request) > 0:
+            print "sending bulk request"
             result = index.bulk_write(bulk_request)
             print result
             bulk_request = ''
             count = 0
 
     if len(bulk_request) > 0:
+        print "sending bulk request"
         result = index.bulk_write(bulk_request)
         print result
 
 if __name__ == '__main__':
-    import_suits_old()
-    clean_old_suits()
     import_suits()
     clean_suits()
     calculate_totals()

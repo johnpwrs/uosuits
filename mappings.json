@@ -25,7 +25,7 @@
             "type":"user"
         },
         "properties": {
-            "date": {
+            "found_date": {
                 "type":"date"
             },
             "gear": {

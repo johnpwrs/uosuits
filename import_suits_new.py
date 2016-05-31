@@ -204,7 +204,7 @@ def parse_user_data_new(line):
         date + ':' + time, 
         '%y%m%d:%H%M%S'
     )
-    date_time = date_time.strftime('%Y-%m-%d:%H:%M:%S')
+    date_time = date_time.strftime('%Y-%m-%dT%H:%M:%SZ')
     user_id = user_details[2]
 
     user_type = user_details[3].split(' ')[0]
@@ -256,7 +256,7 @@ def parse_user_data(line):
         date + ':' + time, 
         '%y%m%d:%H%M%S'
     )
-    date_time = date_time.strftime('%Y-%m-%d:%H:%M:%S')
+    date_time = date_time.strftime('%Y-%m-%dT%H:%M:%SZ')
     user_id = user_details[2]
 
     name = user_details[3].strip()
