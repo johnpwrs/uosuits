@@ -181,7 +181,7 @@ uoSuitsApp.controller('UserController', function($scope, $http, moment, $routePa
     'Weight Reduction'
   ];
 
-  var ignorePieces = ['Ponytail', 'Ship', 'Backpack', 'Long Hair', 'Long Beard', 'Mustache'];
+  var ignorePieces = ['Tiller', 'Ponytail', 'Ship', 'Backpack', 'Long Hair', 'Long Beard', 'Mustache'];
 
   $scope.keys = _.keys;
 
@@ -408,7 +408,7 @@ uoSuitsApp.controller('SearchController', function($scope, $http, moment) {
     'Weight Reduction'
   ];
 
-  var ignorePieces = ['Ponytail', 'Ship', 'Backpack', 'Long Hair', 'Long Beard', 'Mustache'];
+  var ignorePieces = ['Tiller', 'Ponytail', 'Ship', 'Backpack', 'Long Hair', 'Long Beard', 'Mustache'];
 
   $scope.keys = _.keys;
 
