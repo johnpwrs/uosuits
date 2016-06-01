@@ -14,6 +14,18 @@
   src: url("../fonts/Almendra-Regular.otf");
 }
 
+.fa-plus, .fa-minus {
+  display:inline-block;
+  margin-left:5px;
+  vertical-align:middle;
+}
+
+.suit-result {
+  display:inline-block;
+  margin-left:5px;
+  vertical-align:middle;
+}
+
 h1 strong {
   color:#4c4c4c;
 }
@@ -35,7 +47,28 @@ body {
 }
 
 .suit {
+  background-color:white;
+  padding:5px;
+  border: 1px solid black;
+  border-radius:5px;
   margin-left:5px;
+  margin-right:5px;
+}
+
+.suit-header {
+  margin-top:5px;
+}
+
+.suit-details {
+  font-size: 12px;
+}
+
+.gear-props ul {
+  display: inline-block;
+  margin-right:30px;
+  vertical-align:top;
+  width:200px;
+
 }
 
 li.gear-src {

@@ -537,7 +537,7 @@ def calculate_totals():
 def update_elastic():
     index = ElasticIndex(
         'uosuits', 
-        'https://search-uosuits-zf2mqzjundzog3jg2xjzuqeaye.us-west-2.es.amazonaws.com',
+        'https://search-suits-vbaatnpkzo5wgizkdelx64a2w4.us-west-2.es.amazonaws.com',
         port=443
     )
 

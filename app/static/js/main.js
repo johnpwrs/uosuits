@@ -1,7 +1,7 @@
 var uoSuitsApp = angular.module('uoSuitsApp', ['angularMoment', 'ngRoute'])
   .filter('date', function() {
     return function(input) {
-      return moment(input, 'YYYY-MM-DDTHH:mm:ssZ').format("MMM D, YYYY @ h:ma");
+      return moment(input, 'YYYY-MM-DDTHH:mm:ssZ').format("MMM D, YYYY @ h:mma");
     };
   })
   .filter('names', function() {
@@ -16,7 +16,7 @@ var uoSuitsApp = angular.module('uoSuitsApp', ['angularMoment', 'ngRoute'])
           templateUrl: '/views/user_detail.html',
           controller: 'UserController'
         })
-        .when('/', {
+        .otherwise({
           templateUrl: '/views/main_search.html',
           controller: 'SearchController'
         });
@@ -25,6 +25,16 @@ var uoSuitsApp = angular.module('uoSuitsApp', ['angularMoment', 'ngRoute'])
 
 uoSuitsApp.controller('UserController', function($scope, $http, moment, $routeParams, $sce) {
   $scope.userId = $routeParams.userId;
+
+  $scope.hide = function(suit) {
+    console.log("HERE");
+    if (suit.show) {
+      suit.show = false;
+    }
+    else {
+      suit.show = true;
+    }
+  };
   
   $scope.itemResists = [
     'Physical Resist',
@@ -249,8 +259,10 @@ uoSuitsApp.controller('UserController', function($scope, $http, moment, $routePa
   getUser($scope.userId);
 });
 
-uoSuitsApp.controller('SearchController', function($scope, $http, moment) {
+uoSuitsApp.controller('SearchController', function($scope, $http, moment, $q) {
   var searchUrl = '/search/';
+  var requests = [];  
+
   $scope.results = [];
 
   $scope.itemResists = [
@@ -426,18 +438,31 @@ uoSuitsApp.controller('SearchController', function($scope, $http, moment) {
 
   $scope.search = function(searchWord) {
     searchWord = searchWord || $scope.searchWord || '*';
-    $http
-      .get(searchUrl + encodeURIComponent(searchWord), {responseType:'json'})
+  
+    requests.push(
+      $http
+        .get(searchUrl + encodeURIComponent(searchWord), {responseType:'json'})
+    );  
+  
+    $q
+      .all(requests)
       .then(function(result) {
+        if (!result[requests.length-1]) {
+            return;
+        }
+        result = result[result.length-1];
         $scope.results = _.map(result.data.hits.hits, function(hit) {
           hit._source.suits = hit.inner_hits.suits.hits.hits[0]._source;
           hit._source.totalSuits = hit.inner_hits.suits.hits.total;
           return hit;
         });
+        requests.length = 0;
       })
       .catch(function(error) {
+        requests.length = 0;
         console.log(error);  
       });
+
   };
 
   $scope.search('*');

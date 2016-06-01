@@ -5,6 +5,7 @@ from datetime import datetime
 import json
 import sys
 import collections
+import re
 
 users = {}
 properties = [
@@ -469,7 +470,7 @@ def filter_suit(suit):
     for piece in suit['gear']:
         if 'Backpack' in piece['src']:
             continue
-        filtered_suit.append(piece['src'])
+        filtered_suit.append(re.sub(r"Durability.*?\$", "", piece['src']))
     
     return filtered_suit
 
@@ -478,7 +479,7 @@ def filter_suit(suit):
 def update_elastic():
     index = ElasticIndex(
         'uosuits', 
-        'https://search-uosuits-zf2mqzjundzog3jg2xjzuqeaye.us-west-2.es.amazonaws.com',
+        'https://search-suits-vbaatnpkzo5wgizkdelx64a2w4.us-west-2.es.amazonaws.com',
         port=443
     )
 
