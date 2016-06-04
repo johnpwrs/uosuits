@@ -16,6 +16,10 @@ var uoSuitsApp = angular.module('uoSuitsApp', ['angularMoment', 'ngRoute'])
           templateUrl: '/views/user_detail.html',
           controller: 'UserController'
         })
+        .when('/search/:query', {
+          templateUrl: '/views/search_results.html',
+          controller: 'SearchController'  
+        })
         .otherwise({
           templateUrl: '/views/main_search.html',
           controller: 'SearchController'
@@ -259,7 +263,9 @@ uoSuitsApp.controller('UserController', function($scope, $http, moment, $routePa
   getUser($scope.userId);
 });
 
-uoSuitsApp.controller('SearchController', function($scope, $http, moment, $q) {
+uoSuitsApp.controller('SearchController', function($scope, $http, moment, $q, $location, $routeParams) {
+  $scope.query = $routeParams.query;
+  
   var searchUrl = '/search/';
   var requests = [];  
 
@@ -436,6 +442,11 @@ uoSuitsApp.controller('SearchController', function($scope, $http, moment, $q) {
     return ignorePieces.indexOf(name) > -1;
   };
 
+  $scope.goSearch = function() {
+    var searchWord = $scope.searchWord || "*";
+    $location.path('/search/' + searchWord);
+  };
+
   $scope.search = function(searchWord) {
     searchWord = searchWord || $scope.searchWord || '*';
   
@@ -465,6 +476,11 @@ uoSuitsApp.controller('SearchController', function($scope, $http, moment, $q) {
 
   };
 
-  $scope.search('*');
+  if ($scope.query) {
+    $scope.search($scope.query);
+    $scope.searchWord = $scope.query;
+  }
+
+//  $scope.search('*');
 
 });
