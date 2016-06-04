@@ -89,6 +89,7 @@ def user_detail(userId):
 
 @app.route("/search/<query>")
 def search(query):
+    fromNum = request.args.get('from')
     search_query = {
         "query": {
             "bool": {
@@ -118,7 +119,9 @@ def search(query):
                     }
                 ]
             }
-        }
+        },
+        "size":10,
+        "from":fromNum
     } 
     print "searching"
     result = index.search(search_query, ['user'])

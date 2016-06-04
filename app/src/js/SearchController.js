@@ -1,4 +1,4 @@
-var uoSuitsApp = angular.module('uoSuitsApp', ['angularMoment', 'ngRoute'])
+var uoSuitsApp = angular.module('uoSuitsApp', ['angularMoment', 'ngRoute', 'infinite-scroll'])
   .filter('date', function() {
     return function(input) {
       return moment(input, 'YYYY-MM-DDTHH:mm:ssZ').format("MMM D, YYYY @ h:mma");
@@ -453,13 +453,24 @@ uoSuitsApp.controller('SearchController', function($scope, $http, moment, $q, $l
   };
 
   $scope.loading = false;
-  $scope.search = function(searchWord) {
+
+  var from = 0;
+  var done = false;
+
+  $scope.scrollSearch = function() {
+    if ($scope.results.length > 0 && !done) {
+      from = from + 10;
+      $scope.search($scope.searchWord, true);
+    }
+  };
+
+  $scope.search = function(searchWord, isScroll) {
     $scope.loading = true;
     searchWord = searchWord || $scope.searchWord || '*';
   
     requests.push(
       $http
-        .get(searchUrl + encodeURIComponent(searchWord), {responseType:'json'})
+        .get(searchUrl + encodeURIComponent(searchWord) + "?from=" + from, {responseType:'json'})
     );  
   
     $q
@@ -469,11 +480,24 @@ uoSuitsApp.controller('SearchController', function($scope, $http, moment, $q, $l
             return;
         }
         result = result[result.length-1];
-        $scope.results = _.map(result.data.hits.hits, function(hit) {
-          hit._source.suits = hit.inner_hits.suits.hits.hits[0]._source;
-          hit._source.totalSuits = hit.inner_hits.suits.hits.total;
-          return hit;
-        });
+        if (isScroll) {
+          if (result.data.hits.hits.length < 1) {
+            done = true;
+          }
+          $scope.results = _.union($scope.results, _.map(result.data.hits.hits, function(hit) {
+            hit._source.suits = hit.inner_hits.suits.hits.hits[0]._source;
+            hit._source.totalSuits = hit.inner_hits.suits.hits.total;
+            return hit;
+          }));
+
+        }
+        else {
+          $scope.results = _.map(result.data.hits.hits, function(hit) {
+            hit._source.suits = hit.inner_hits.suits.hits.hits[0]._source;
+            hit._source.totalSuits = hit.inner_hits.suits.hits.total;
+            return hit;
+          });
+        }
         requests.length = 0;
         $scope.loading = false;
       })

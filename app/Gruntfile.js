@@ -11,7 +11,7 @@ module.exports = function(grunt) {
     },
     watch: {
       files: ['<%= jshint.files %>', './src/views/*.html', './src/css/*.css'],
-      tasks: ['jshint', 'concat', 'copy']
+      tasks: ['jshint', 'concat', 'copy', 'uglify']
     },
     concat: {
       js: {
@@ -21,6 +21,16 @@ module.exports = function(grunt) {
       css: {
         src: ['./src/css/*.css'],
         dest: './static/css/main.css'
+      }
+    },
+    uglify: {
+      dist: {
+        options: {
+          mangle:false
+        },
+        files: {
+          './static/js/main.js': ['./static/js/main.js']
+        }
       }
     },
     copy: {
@@ -61,8 +71,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
 
   grunt.registerTask('default', ['jshint', 'concat', 'copy', 'watch']);
-  grunt.registerTask('build', ['jshint', 'concat', 'copy']);
+  grunt.registerTask('build', ['jshint', 'concat', 'copy', 'uglify']);
 
 };

@@ -5,26 +5,22 @@
   </div>
 </div>
 
-<div class="row-fluid suit-details">
-  <div class="row-fluid suit-header" ng-repeat="suit in userResult._source.suits">
+<div class="row-fluid suit-details" ng-repeat="suit in userResult._source.suits">
+  <div class="row-fluid suit-header">
+    <div class="span4">
+      <i class="fa fa-plus" ng-hide="suit.show" ng-click="hide(suit)"></i>
+      <i class="fa fa-minus" ng-show="suit.show" ng-click="hide(suit)"></i>
 
-    <i class="fa fa-plus" ng-hide="suit.show" ng-click="hide(suit)"></i>
-    <i class="fa fa-minus" ng-show="suit.show" ng-click="hide(suit)"></i>
-
-    <h4 class="suit-result" style="color:#00007f;">Suit on {{suit._source.found_date | date}}</h4>
-    <div class="span11 suit" ng-show="suit.show">
-
-      <div class="row-fluid">
-      <div class="span12">
-        <h4 class="result-title" style="color:#00007f;">Pieces:</h4>
-        <ul class="fa-ul">
-          <li class="gear-src" ng-repeat="piece in suit._source.gear" ng-bind-html="formatGear(piece)" ng-if="!ignoreItem(piece)"></li>
-        </ul>
-      </div>
-      </div>
-
-      <div class="row-fluid">
-      <div class="span6 gear-props">
+      <h4 class="suit-result" style="color:#00007f;">Suit on {{suit._source.found_date | date}}</h4> 
+    </div>
+  </div>
+  
+  <div class="row-fluid"> 
+  
+    <div class="span10 offset1 suit" ng-show="suit.show">
+    
+      <div class="row-fluid gear-props">
+        <div class="span8 offset1">
         <h4 class="result-title" style="color:#cc8400;">Properties Totals:</h4>
         <ul class="fa-ul">
           <li ng-repeat="prop in statProperties" ng-if="suit._source.totals[prop]">
@@ -68,8 +64,9 @@
               <strong>{{prop}}:</strong> {{suit._source.totals[prop]}}
           </li>
         </ul>
-      </div>
-      <div class="span3 resists-details">
+        </div>
+        
+        <div class="span2">
         <h4 class="result-title" style="color:#006600;">Total Resists:</h4>
         <ul class="fa-ul">
           <li ng-repeat="prop in itemResists" ng-if="suit._source.totals[prop]">
@@ -77,12 +74,18 @@
               <strong>{{prop}}:</strong> {{suit._source.totals[prop]}}
           </li>
         </ul>
+        </div>
       </div>
+      
+      <div class="row-fluid">
+        <div class="span10 offset1">
+        <h4 class="result-title" style="color:#00007f;">Pieces:</h4>
+        <ul class="fa-ul">
+          <li class="gear-src" ng-repeat="piece in suit._source.gear" ng-bind-html="formatGear(piece)" ng-if="!ignoreItem(piece)"></li>
+        </ul>
+        </div>
       </div>
 
     </div>
-    </div>
-  </div>
-  </div>
   </div>
 </div>
