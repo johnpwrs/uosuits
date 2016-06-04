@@ -23,6 +23,10 @@ def home():
 def send_js(path):
     return send_from_directory('static', 'js/' + path) 
 
+@app.route('/favicon.ico')
+def send_favicon():
+    return send_from_directory('static', 'img/favicon.ico') 
+
 @app.route('/css/<path:path>')
 def send_css(path):
     return send_from_directory('static', 'css/' + path) 
@@ -91,38 +95,73 @@ def user_detail(userId):
 def search(query):
     fromNum = request.args.get('from')
     search_query = {
-        "query": {
-            "bool": {
-                "must": [
-                    {
-                        "has_child": {
-                            "type": "suits",
-                             "query": {
-                                "match_all": {}
-                             },
-                             "inner_hits": {
+       "query": {
+          "filtered": {
+             "filter": {
+                "or": [
+                   {
+                      "and": [
+                         {
+                            "has_child": {
+                               "type": "suits",
+                               "query": {
+                                  "match_all": {}
+                               },
+                               "inner_hits": {
                                   "sort": [
-                                      {
-                                          "suits.found_date": {
-                                              "order": "desc"   
-                                          }
-                                      }
+                                     {
+                                        "suits.found_date": {
+                                           "order": "desc"
+                                        }
+                                     }
                                   ],
                                   "size": 1
+                               }
                             }
-                        }
-                    },
-                    {
-                        "match": {
-                            "name": query 
-                        }
-                    }
+                         },
+                         {
+                            "query": {
+                               "multi_match": {
+                                  "query": query,
+                                  "fields": ["name", "names"]
+                               }
+                            }
+                         }
+                      ]
+                   },
+                   {
+                      "has_child": {
+                         "type": "suits",
+                         "query": {
+                            "nested": {
+                               "path": "gear",
+                               "query": {
+                                  "match": {
+                                     "gear.name": query
+                                  }
+                               },
+                               "inner_hits": {
+                                  "sort": [
+                                     {
+                                        "suits.found_date": {
+                                           "order": "desc"
+                                        }
+                                     }
+                                  ],
+                                  "size": 1
+                               }
+                            }
+                         }
+                      }
+                   }
                 ]
-            }
-        },
-        "size":10,
-        "from":fromNum
+             }
+          }
+       },
+      "size":10,
+      "from":fromNum
     } 
+    
     print "searching"
     result = index.search(search_query, ['user'])
     print "finished searching"

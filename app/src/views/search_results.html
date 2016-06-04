@@ -10,11 +10,11 @@
       <div class="row-fluid">
         <div class="span4"></div>
         <div class="span4">
-            <div class="row">
+            <div class="row-fluid">
 
               <form ng-submit="goSearch()">
               <div class="span11">
-                <input type="text" id="search-box" class="search-box input-large search-query" placeholder="Type a players name..." ng-model="searchWord"/>
+                <input type="text" id="search-box" class="search-box input-large search-query" placeholder="Type a players name or a piece of gear..." ng-model="searchWord"/>
               </div>
               <div class="span1">
                 <button class="btn search-btn">Submit</button>
@@ -23,6 +23,12 @@
             </div>
         </div>
         <div class="span4"></div>
+      </div>
+      <div class="row-fluid" ng-if="total">
+        <div class="span4"></div>
+        <div class="span4" style="text-align:left; margin-top:10px;">
+        Found <strong>{{total}}</strong> results
+        </div>
       </div>
       <div infinite-scroll="scrollSearch()">
       <div class="row-fluid search-result" ng-repeat="result in results">

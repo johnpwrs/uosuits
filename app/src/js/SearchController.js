@@ -272,7 +272,6 @@ uoSuitsApp.controller('SearchController', function($scope, $http, moment, $q, $l
   $scope.query = $routeParams.query;
   
   var searchUrl = '/search/';
-  var requests = [];  
 
   $scope.results = [];
 
@@ -458,7 +457,7 @@ uoSuitsApp.controller('SearchController', function($scope, $http, moment, $q, $l
   var done = false;
 
   $scope.scrollSearch = function() {
-    if ($scope.results.length > 0 && !done) {
+    if ($scope.results.length > 9 && !done) {
       from = from + 10;
       $scope.search($scope.searchWord, true);
     }
@@ -468,18 +467,9 @@ uoSuitsApp.controller('SearchController', function($scope, $http, moment, $q, $l
     $scope.loading = true;
     searchWord = searchWord || $scope.searchWord || '*';
   
-    requests.push(
       $http
         .get(searchUrl + encodeURIComponent(searchWord) + "?from=" + from, {responseType:'json'})
-    );  
-  
-    $q
-      .all(requests)
       .then(function(result) {
-        if (!result[requests.length-1]) {
-            return;
-        }
-        result = result[result.length-1];
         if (isScroll) {
           if (result.data.hits.hits.length < 1) {
             done = true;
@@ -492,18 +482,17 @@ uoSuitsApp.controller('SearchController', function($scope, $http, moment, $q, $l
 
         }
         else {
+          $scope.total = result.data.hits.total;
           $scope.results = _.map(result.data.hits.hits, function(hit) {
             hit._source.suits = hit.inner_hits.suits.hits.hits[0]._source;
             hit._source.totalSuits = hit.inner_hits.suits.hits.total;
             return hit;
           });
         }
-        requests.length = 0;
         $scope.loading = false;
       })
       .catch(function(error) {
         $scope.loading = false;
-        requests.length = 0;
         console.log(error);  
       });
 
