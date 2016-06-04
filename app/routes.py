@@ -72,7 +72,7 @@ def user_detail(userId):
                                           }
                                       }
                                   ],
-                                  "size": 5
+                                  "size": 15
                             }
                         }
                     },
