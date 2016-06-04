@@ -243,8 +243,11 @@ uoSuitsApp.controller('UserController', function($scope, $http, moment, $routePa
    
     return $sce.trustAsHtml(result); 
   };
+ 
+  $scope.loading = false;
   
   var getUser = function(userId) {
+    $scope.loading = true;
     $http
       .get('/user/' + encodeURIComponent(userId), {responseType:'json'})
       .then(function(result) {
@@ -252,10 +255,12 @@ uoSuitsApp.controller('UserController', function($scope, $http, moment, $routePa
           hit._source.suits = hit.inner_hits.suits.hits.hits;
           return hit;
         })[0];
+        $scope.loading = false;
 
         console.log($scope.userResult);
       })
       .catch(function(error) {
+        $scope.loading = false;
         console.log(error);  
       });
   };
@@ -447,7 +452,9 @@ uoSuitsApp.controller('SearchController', function($scope, $http, moment, $q, $l
     $location.path('/search/' + searchWord);
   };
 
+  $scope.loading = false;
   $scope.search = function(searchWord) {
+    $scope.loading = true;
     searchWord = searchWord || $scope.searchWord || '*';
   
     requests.push(
@@ -468,8 +475,10 @@ uoSuitsApp.controller('SearchController', function($scope, $http, moment, $q, $l
           return hit;
         });
         requests.length = 0;
+        $scope.loading = false;
       })
       .catch(function(error) {
+        $scope.loading = false;
         requests.length = 0;
         console.log(error);  
       });

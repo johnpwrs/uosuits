@@ -10,9 +10,17 @@
       <div class="row-fluid">
         <div class="span4"></div>
         <div class="span4">
-            <form ng-submit="goSearch()">
-            <input type="text" id="search-box" class="search-box input-large search-query" placeholder="Type a players name or a piece of gear..." ng-model="searchWord"/>
-        </form>
+            <div class="row">
+
+              <form ng-submit="goSearch()">
+              <div class="span11">
+                <input type="text" id="search-box" class="search-box input-large search-query" placeholder="Type a players name or a piece of gear..." ng-model="searchWord"/>
+              </div>
+              <div class="span1">
+                <button class="btn search-btn">Submit</button>
+              </div>
+                </form>
+            </div>
         </div>
         <div class="span4"></div>
       </div>
