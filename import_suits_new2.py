@@ -341,7 +341,7 @@ def import_suits():
     user_details = None
     user_id = None
     
-    for line in open('suitnew.txt', 'r'):
+    for line in open('suitnew2.txt', 'r'):
         line = unicode(line, errors='replace')
         user_titles = []
         line = line.strip().replace('\n', '')
@@ -430,7 +430,7 @@ def get_user_update_req(user_id, user, user_doc):
     es_names = user_doc['_source']['names']
     
     if user['name'] != es_name: 
-        update_doc['doc']['user'] = user['name']
+        update_doc['doc']['name'] = user['name']
    
     namesChanged = False 
     for name in user['names']:

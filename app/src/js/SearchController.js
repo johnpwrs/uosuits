@@ -463,6 +463,8 @@ uoSuitsApp.controller('SearchController', function($scope, $http, moment, $q, $l
     }
   };
 
+  $scope.showTotal = false;
+
   $scope.search = function(searchWord, isScroll) {
     $scope.loading = true;
     searchWord = searchWord || $scope.searchWord || '*';
@@ -489,6 +491,7 @@ uoSuitsApp.controller('SearchController', function($scope, $http, moment, $q, $l
             return hit;
           });
         }
+        $scope.showTotal = true;
         $scope.loading = false;
       })
       .catch(function(error) {
