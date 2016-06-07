@@ -316,16 +316,33 @@ def parse_equipment_data_new(line):
 def clean_suits():
     for user in users:
         del_indices = []
-        for i in range(0, len(users[user]['suits'])-1):
-            for j in range(0, len(users[user]['suits'])-1):
-                if j == i:
-                    continue
-                filter_suit_a = filter_suit(users[user]['suits'][i])
-                filter_suit_b = filter_suit(users[user]['suits'][j])
-                if collections.Counter(filter_suit_a) == collections.Counter(filter_suit_b):
-                    if i not in del_indices:
-                        del_indices.append(i)
-        
+        suit_dupes = {}
+        counter = 0
+
+        for i in range(0, len(users[user]['suits'])):
+            filter_suit_a = filter_suit(users[user]['suits'][i])
+            filter_suit_counter = collections.Counter(filter_suit_a) 
+            found_counter = False
+            for key, val in suit_dupes.iteritems():
+                if suit_dupes[key]['counter'] == filter_suit_counter:
+                    found_counter = True
+                    suit_dupes[key]['indexes'].append(i)
+            
+            if not found_counter:
+                suit_dupes[counter] = {
+                    'counter': filter_suit_counter,
+                    'indexes': [i]
+                }
+                counter = counter + 1
+      
+        del_indices = []
+        for key, val in suit_dupes.iteritems():
+            if len(suit_dupes[key]['indexes']) > 1:
+                del suit_dupes[key]['indexes'][0]
+                for index in suit_dupes[key]['indexes']:
+                    del_indices.append(index)
+       
+        del_indices.sort() 
         for index in reversed(del_indices):
             del users[user]['suits'][index]
 
@@ -341,7 +358,7 @@ def import_suits():
     user_details = None
     user_id = None
     
-    for line in open('suitnew2.txt', 'r'):
+    for line in open('suitnew9.txt', 'r'):
         line = unicode(line, errors='replace')
         user_titles = []
         line = line.strip().replace('\n', '')
@@ -468,6 +485,12 @@ def filter_suit(suit):
     if '_source' in suit:
         suit = suit['_source']
     for piece in suit['gear']:
+        split_src = piece['src'].split('$')
+        if len(split_src) > 1:
+            if 'Rudder' == split_src[1]:
+                continue
+            if 'Ship' == split_src[1]:
+                continue
         if 'Backpack' in piece['src']:
             continue
         filtered_suit.append(re.sub(r"Durability.*?\$", "", piece['src']))
