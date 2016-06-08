@@ -358,7 +358,7 @@ def import_suits():
     user_details = None
     user_id = None
     
-    for line in open('suitnew9.txt', 'r'):
+    for line in open('suitnew12.txt', 'r'):
         line = unicode(line, errors='replace')
         user_titles = []
         line = line.strip().replace('\n', '')
