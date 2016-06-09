@@ -26,6 +26,43 @@
   vertical-align:middle;
 }
 
+.timeline li.stats {
+  margin-bottom:0px;
+}
+
+li div.timeline-panel {
+  width:100% !important;
+}
+
+.stats-row {
+  margin-bottom:10px;
+}
+  
+ul.timeline {
+  margin-left:25px;
+  margin-right:25px;
+  margin-top:25px;
+}
+
+.timeline .stats-list {
+  display:inline-block;
+  font-size:10px;
+  margin-right:0px;
+  margin-bottom:10px;
+  width:165px;
+  vertical-align:top;
+}
+
+.timeline .suit-list {
+  display:inline-block;
+  font-size:10px;
+  margin-right:0px;
+  width:100%;
+  vertical-align:top;
+}
+
+
+
 h1 strong {
   color:#4c4c4c;
 }
@@ -44,6 +81,15 @@ div {
 
 body {
   background-color:#F8F8FF;
+}
+
+.view-details {
+  text-align:right;
+}
+
+.view-details a {
+  text-decoration:none;
+  font-family: AlmendraRegular;
 }
 
 .suit {
@@ -78,9 +124,15 @@ body {
 
 li.gear-src {
   display: inline-block;
-  margin-right:30px;
   vertical-align:top;
-  width:200px;
+  width:160px;
+  margin-right:5px;
+}
+
+.suit-row {
+  margin-top:25px;
+  padding-top:25px;
+  border-top:1px solid black;
 }
 
 .username {

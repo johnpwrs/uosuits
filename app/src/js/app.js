@@ -1,5 +1,5 @@
 var uoSuitsApp = angular.module('uoSuitsApp', 
-    ['angularMoment', 'ngRoute', 'infinite-scroll']
+    ['angularMoment', 'ngRoute', 'infinite-scroll', 'angular-timeline']
   )
   .filter('date', function() {
     return function(input) {

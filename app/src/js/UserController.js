@@ -1,7 +1,7 @@
 uoSuitsApp.controller('UserController', 
   function($scope, $http, moment, $routeParams, $sce, 
     itemResists, skills, magicProperties, defenseProperties, regenProperties, 
-    statProperties, attackProperties, properties) {
+    statProperties, attackProperties, properties, ignorePieces) {
   
   $scope.userId = $routeParams.userId;
   $scope.itemResists = itemResists;
@@ -50,7 +50,8 @@ uoSuitsApp.controller('UserController',
   };
  
   $scope.formatGear = function(gear) {
-    result = '<i class="fa-li fa fa-black-tie"></i>';
+    //result = '<i class="fa-li fa fa-black-tie"></i>';
+    result = '';
     splitGear = gear.src.split("$");
     var startingIndex = 0;
 
