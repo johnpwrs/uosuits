@@ -358,7 +358,7 @@ def import_suits():
     user_details = None
     user_id = None
     
-    for line in open('suitnew14.txt', 'r'):
+    for line in open('suitnew19.txt', 'r'):
         line = unicode(line, errors='replace')
         user_titles = []
         line = line.strip().replace('\n', '')
@@ -390,7 +390,7 @@ def calculate_totals():
                     # a property listed twice.  We only want the total value
                     if isinstance(value, list):
                         for val in value:
-                            if '(total)' in val:
+                            if not isinstance(val, bool) and '(total)' in val:
                                 value = val
                                 break
                         if isinstance(value, list):

@@ -58,6 +58,8 @@ uoSuitsApp.controller('SearchController',
           {responseType:'json'}
         )
       .then(function(result) {
+        ga('set', 'page', '/search/#/' + searchWord);
+        ga('send', 'pageview');
         if (isScroll) {
           if (result.data.hits.hits.length < 1) {
             done = true;

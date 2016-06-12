@@ -78,6 +78,8 @@ uoSuitsApp.controller('UserController',
     $http
       .get('/user/' + encodeURIComponent(userId), {responseType:'json'})
       .then(function(result) {
+        ga('set', 'page', '/user/#/' + userId);
+        ga('send', 'pageview');
         $scope.userResult = _.map(result.data.hits.hits, function(hit) {
           hit._source.suits = hit.inner_hits.suits.hits.hits;
           return hit;
