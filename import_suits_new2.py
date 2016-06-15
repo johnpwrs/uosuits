@@ -358,7 +358,7 @@ def import_suits():
     user_details = None
     user_id = None
     
-    for line in open('suitnew19.txt', 'r'):
+    for line in open('suitnew23.txt', 'r'):
         line = unicode(line, errors='replace')
         user_titles = []
         line = line.strip().replace('\n', '')
@@ -403,7 +403,8 @@ def calculate_totals():
                         else:
                             set_pieces.append(property_name)
                     
-                    value = value.rstrip('%')
+                    #value = value.rstrip('%')
+                    value = re.sub(r"%.*", "", value)
                     value = value.lstrip('+')
                     try:
                       value = int(value)
