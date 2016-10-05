@@ -7,6 +7,9 @@ import sys
 import collections
 import re
 
+filename = sys.argv[1]
+print filename
+
 users = {}
 properties = [
   'Range',
@@ -358,7 +361,7 @@ def import_suits():
     user_details = None
     user_id = None
     
-    for line in open('suitnew23.txt', 'r'):
+    for line in open(filename, 'r'):
         line = unicode(line, errors='replace')
         user_titles = []
         line = line.strip().replace('\n', '')
@@ -478,6 +481,8 @@ def get_user_suits(index, user):
         },
         "size":100
     }
+
+    print search_query
 
     return index.search(search_query, ['suits'])
 
